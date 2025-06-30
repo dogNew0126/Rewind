@@ -1,0 +1,25 @@
+{
+	"FileVersion": 3,
+	"EngineAssociation": "{61558DC2-41CB-C1A1-8BA7-CBA08D7977D9}",
+	"Category": "",
+	"Description": "",
+	"Modules": [
+		{
+			"Name": "Rewind",
+			"Type": "Runtime",
+			"LoadingPhase": "Default",
+			"AdditionalDependencies": [
+				"Engine"
+			]
+		}
+	],
+	"Plugins": [
+		{
+			"Name": "ModelingToolsEditorMode",
+			"Enabled": true,
+			"TargetAllowList": [
+				"Editor"
+			]
+		}
+	]
+}
