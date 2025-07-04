@@ -10,6 +10,8 @@
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
 #include "InputActionValue.h"
+#include "Rewind/CharacterRewindComponent.h"
+#include "Rewind/SnapshotTypes.h"
 
 ARewindCharacter::ARewindCharacter()
 {
@@ -39,6 +41,9 @@ ARewindCharacter::ARewindCharacter()
 	FollowCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("FollowCamera"));
 	FollowCamera->SetupAttachment(CameraBoom, USpringArmComponent::SocketName);
 	FollowCamera->bUsePawnControlRotation = false; // Camera does not rotate relative to arm
+
+	CharacterRewindComponent = CreateDefaultSubobject<UCharacterRewindComponent>(TEXT("CharacterRewindComponent"));
 }
+
 
 
