@@ -23,8 +23,9 @@ public:
 
 	ARewindCharacter();
 
-	FORCEINLINE class USpringArmComponent* GetCameraBoom() const { return CameraBoom; }
-	FORCEINLINE class UCameraComponent* GetFollowCamera() const { return FollowCamera; }
+	FORCEINLINE USpringArmComponent* GetCameraBoom() const { return CameraBoom; }
+	FORCEINLINE UCameraComponent* GetFollowCamera() const { return FollowCamera; }
+	FORCEINLINE UCharacterRewindComponent* GetCharacterRewindComponent() const { return CharacterRewindComponent; }
 
 private:
 

@@ -13,6 +13,8 @@ struct FInputActionValue;
 
 DECLARE_LOG_CATEGORY_EXTERN(LogTemplateCharacter, Log, All);
 
+class UCharacterRewindComponent;
+
 /**
  * 
  */
@@ -46,46 +48,49 @@ protected:
 	
 private:
 	UPROPERTY(Transient, VisibleAnywhere, Category = "Rewind|Debug")
-	ARewindGameModeBase* GameMode;
+	TObjectPtr<ARewindGameModeBase> GameMode;
+
+	UPROPERTY()
+	TObjectPtr<UCharacterRewindComponent> CharacterRewindComponent;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
-	UInputMappingContext* RewindMappingContext;
+	TObjectPtr<UInputMappingContext> RewindMappingContext;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
-	UInputAction* JumpAction;
+	TObjectPtr<UInputAction> JumpAction;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
-	UInputAction* MoveAction;
+	TObjectPtr<UInputAction> MoveAction;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
-	UInputAction* LookAction;
+	TObjectPtr<UInputAction> LookAction;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
-	UInputAction* RewindAction;
+	TObjectPtr<UInputAction> RewindAction;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
-	UInputAction* FastForwardAction;
+	TObjectPtr<UInputAction> FastForwardAction;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
-	UInputAction* ToggleTimeScrubAction;
+	TObjectPtr<UInputAction> ToggleTimeScrubAction;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
-	UInputAction* ToggleRewindPartipationAction;
+	TObjectPtr<UInputAction> ToggleRewindPartipationAction;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
-	UInputAction* SetRewindSpeedSlowestAction;
+	TObjectPtr<UInputAction> SetRewindSpeedSlowestAction;
 
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
-	UInputAction* SetRewindSpeedSlowerAction;
+	TObjectPtr<UInputAction> SetRewindSpeedSlowerAction;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
-	UInputAction* SetRewindSpeedNormalAction;
+	TObjectPtr<UInputAction> SetRewindSpeedNormalAction;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
-	UInputAction* SetRewindSpeedFasterAction;
+	TObjectPtr<UInputAction> SetRewindSpeedFasterAction;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
-	UInputAction* SetRewindSpeedFastestAction;
+	TObjectPtr<UInputAction> SetRewindSpeedFastestAction;
 
 };

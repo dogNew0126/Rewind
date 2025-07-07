@@ -97,18 +97,17 @@ void UCharacterRewindComponent::ApplySnapshotWhenStopTimeManipulation()
 	ApplySnapshot(PlayerSnapshots[LatestSnapshotIndex], false /*bApplyTimeDilationToVelocity*/);
 }
 
-void UCharacterRewindComponent::RecordSnapshot(float DeltaTime)
+void UCharacterRewindComponent::OnRecordSnapshot()
 {
-	Super::RecordSnapshot(DeltaTime);
+	Super::OnRecordSnapshot();
 
 	if (PlayerSnapshots.Num() == MaxSnapshots) { PlayerSnapshots.PopFront(); }
 
 	// Record the movement velocity and movement mode
 	FVector MovementVelocity = OwnerMovementComponent->Velocity;
 	TEnumAsByte<EMovementMode> MovementMode = OwnerMovementComponent->MovementMode;
-	int32 LatestMovementSnapshotIndex =
-		PlayerSnapshots.Emplace(TimeSinceSnapshotsChanged, MovementVelocity, MovementMode);
-	//check(LatestSnapshotIndex == LatestMovementSnapshotIndex);
+	int32 LatestMovementSnapshotIndex = PlayerSnapshots.Emplace(TimeSinceSnapshotsChanged, MovementVelocity, MovementMode);
+	check(LatestSnapshotIndex == LatestMovementSnapshotIndex);
 }
 
 void UCharacterRewindComponent::ApplySnapshot(const FPlayerSnapshot& Snapshot, bool bApplyTimeDilationToVelocity)

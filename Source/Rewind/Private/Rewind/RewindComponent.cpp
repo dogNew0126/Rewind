@@ -122,16 +122,9 @@ void URewindComponent::OnGlobalTimeScrubCompleted()
 	}
 }
 
-void URewindComponent::ClearTimeSinceSnapshotsChanged()
-{
-	TimeSinceSnapshotsChanged = bShouldClearTimeSinceSnapshotsChanged ? 0.0f : TimeSinceSnapshotsChanged;
-}
-
 bool URewindComponent::TryStartTimeManipulation(bool& bStateToSet, bool bResetTimeSinceSnapshotsChanged)
 {
 	if (!bIsRewindingEnabled || bStateToSet) { return false; }
-
-	GEngine->AddOnScreenDebugMessage(-1, 1.f, FColor::Blue, "Enter!!!!!!");
 
 	bStateToSet = true;
 	if (bResetTimeSinceSnapshotsChanged) { TimeSinceSnapshotsChanged = 0.0f; }
@@ -139,7 +132,7 @@ bool URewindComponent::TryStartTimeManipulation(bool& bStateToSet, bool bResetTi
 	PausePhysics();
 	bAnimationsPausedAtStartOfTimeManipulation = bPausedAnimation;
 
-	return false;
+	return true;
 }
 
 bool URewindComponent::TryStopTimeManipulation(bool& bStateToSet, bool bResetTimeSinceSnapshotsChanged)
@@ -229,17 +222,18 @@ void URewindComponent::RecordSnapshot(float DeltaTime)
 	TimeSinceSnapshotsChanged += DeltaTime;
 
 	// Early out if last snapshot was taken within the desired snapshot cadence
-	if (TimeSinceSnapshotsChanged < SnapshotFrequencySeconds && Snapshots.Num() != 0) { 
-		bShouldClearTimeSinceSnapshotsChanged = false; 
-		return; 
-	}
-
-	bShouldClearTimeSinceSnapshotsChanged = true;
+	if (TimeSinceSnapshotsChanged < SnapshotFrequencySeconds && Snapshots.Num() != 0) { return; }
 
 	// If the buffer is full, drop the oldest snapshot
 	if (Snapshots.Num() == MaxSnapshots) { Snapshots.PopFront(); }
 
-	// Record the transform and velocity
+	OnRecordSnapshot();
+
+	TimeSinceSnapshotsChanged = 0.0f;
+}
+
+void URewindComponent::OnRecordSnapshot()
+{
 	FTransform Transform = GetOwner()->GetActorTransform();
 	FVector LinearVelocity = OwnerRootComponent ? OwnerRootComponent->GetPhysicsLinearVelocity() : FVector::Zero();
 	FVector AngularVelocityInRadians = OwnerRootComponent ? OwnerRootComponent->GetPhysicsAngularVelocityInRadians() : FVector::Zero();
@@ -373,9 +367,6 @@ void URewindComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActo
 	if (bIsRewinding) { PlaySnapshots(DeltaTime, true /*bRewinding*/); }
 	else if (bIsFastForwarding) { PlaySnapshots(DeltaTime, false /*bRewinding*/); }
 	else if (bIsTimeScrubbing) { PauseTime(DeltaTime, bLastTimeManipulationWasRewind); }
-	else { 
-		RecordSnapshot(DeltaTime); 
-		ClearTimeSinceSnapshotsChanged();
-	}
+	else { RecordSnapshot(DeltaTime); }
 }
 

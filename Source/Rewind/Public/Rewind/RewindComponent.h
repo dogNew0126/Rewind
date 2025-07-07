@@ -69,7 +69,7 @@ protected:
 
 	/** Snapshots */
 	virtual void InitializeRingBuffers(float MaxRewindSeconds);
-	virtual void RecordSnapshot(float DeltaTime);
+	virtual void OnRecordSnapshot();
 	virtual void EraseFutureSnapshots();
 	virtual void InterpolateAndApplySnapshots(bool bRewinding);
 	virtual void ApplySnapshotWhenPauseTimeOrEmptyBuffer();
@@ -78,7 +78,6 @@ protected:
 	// Helper function for PlaySnapshots/PauseTime that handle cases where there are insufficient snapshots to interpolate
 
 private:
-	void ClearTimeSinceSnapshotsChanged();
 
 	// Helper to start a time manipulation operation
 	bool TryStartTimeManipulation(bool& bStateToSet, const bool bResetTimeSinceSnapshotsChanged);
@@ -87,6 +86,7 @@ private:
 
 	void PlaySnapshots(float DeltaTime, bool bRewinding);
 	void PauseTime(float DeltaTime, bool bRewinding);
+	void RecordSnapshot(float DeltaTime);
 	bool HandleInsufficientSnapshots();
 
 	FBaseSnapshot BlendSnapshots(const FBaseSnapshot& A, const FBaseSnapshot& B, float Alpha);

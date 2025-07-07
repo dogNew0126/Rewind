@@ -6,6 +6,7 @@
 #include "EnhancedInputComponent.h"
 #include "Game/RewindGameModeBase.h"
 #include "GameFramework/Character.h"
+#include "Rewind/CharacterRewindComponent.h"
 
 DEFINE_LOG_CATEGORY(LogTemplateCharacter);
 
@@ -20,6 +21,9 @@ void ARewindPlayerController::BeginPlay()
 	}
 
 	GameMode = Cast<ARewindGameModeBase>(GetWorld()->GetAuthGameMode());
+
+	CharacterRewindComponent = GetPawn()->FindComponentByClass<UCharacterRewindComponent>();
+	check(CharacterRewindComponent);
 }
 
 void ARewindPlayerController::SetupInputComponent()
@@ -55,6 +59,9 @@ void ARewindPlayerController::SetupInputComponent()
 
 void ARewindPlayerController::Move(const FInputActionValue& Value)
 {
+	// Ignore input while manipulating time
+	if (CharacterRewindComponent->IsTimeBeingManipulated()) { return; }
+
 	FVector2D MovementVector = Value.Get<FVector2D>();
 	const FRotator Rotation = GetControlRotation();
 	const FRotator YawRotation(0, Rotation.Yaw, 0);
@@ -82,6 +89,7 @@ void ARewindPlayerController::Look(const FInputActionValue& Value)
 
 void ARewindPlayerController::Jump()
 {
+	if (CharacterRewindComponent->IsTimeBeingManipulated()) { return; }
 	if (ACharacter* RewindCharacter = Cast<ACharacter>(GetPawn()))
 	{
 		RewindCharacter->Jump();
@@ -90,6 +98,7 @@ void ARewindPlayerController::Jump()
 
 void ARewindPlayerController::StopJumping()
 {
+	if (CharacterRewindComponent->IsTimeBeingManipulated()) { return; }
 	if (ACharacter* RewindCharacter = Cast<ACharacter>(GetPawn()))
 	{
 		RewindCharacter->StopJumping();

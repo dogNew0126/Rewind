@@ -29,7 +29,7 @@ protected:
 	virtual void InitializeRingBuffers(float MaxRewindSeconds) override;
 	virtual void ApplySnapshotWhenPauseTimeOrEmptyBuffer() override;
 	virtual void ApplySnapshotWhenStopTimeManipulation() override;
-	virtual void RecordSnapshot(float DeltaTime) override;
+	virtual void OnRecordSnapshot() override;
 
 private:
 	void ApplySnapshot(const FPlayerSnapshot& Snapshot, bool bApplyTimeDilationToVelocity);
