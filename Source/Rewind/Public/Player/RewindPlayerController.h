@@ -14,6 +14,7 @@ struct FInputActionValue;
 DECLARE_LOG_CATEGORY_EXTERN(LogTemplateCharacter, Log, All);
 
 class UCharacterRewindComponent;
+class ARewindCharacter;
 
 /**
  * 
@@ -49,6 +50,9 @@ protected:
 private:
 	UPROPERTY(Transient, VisibleAnywhere, Category = "Rewind|Debug")
 	TObjectPtr<ARewindGameModeBase> GameMode;
+
+	UPROPERTY()
+	TObjectPtr<ARewindCharacter> RewindCharacter;
 
 	UPROPERTY()
 	TObjectPtr<UCharacterRewindComponent> CharacterRewindComponent;

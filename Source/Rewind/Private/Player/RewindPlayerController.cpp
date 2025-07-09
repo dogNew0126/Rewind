@@ -7,6 +7,7 @@
 #include "Game/RewindGameModeBase.h"
 #include "GameFramework/Character.h"
 #include "Rewind/CharacterRewindComponent.h"
+#include "Character/RewindCharacter.h"
 
 DEFINE_LOG_CATEGORY(LogTemplateCharacter);
 
@@ -24,6 +25,9 @@ void ARewindPlayerController::BeginPlay()
 
 	CharacterRewindComponent = GetPawn()->FindComponentByClass<UCharacterRewindComponent>();
 	check(CharacterRewindComponent);
+
+	RewindCharacter = CastChecked<ARewindCharacter>(GetPawn());
+	check(RewindCharacter);
 }
 
 void ARewindPlayerController::SetupInputComponent()
@@ -60,7 +64,7 @@ void ARewindPlayerController::SetupInputComponent()
 void ARewindPlayerController::Move(const FInputActionValue& Value)
 {
 	// Ignore input while manipulating time
-	if (CharacterRewindComponent->IsTimeBeingManipulated()) { return; }
+	if (CharacterRewindComponent->IsTimeBeingManipulated() || RewindCharacter->bIsDead) { return; }
 
 	FVector2D MovementVector = Value.Get<FVector2D>();
 	const FRotator Rotation = GetControlRotation();
@@ -69,10 +73,10 @@ void ARewindPlayerController::Move(const FInputActionValue& Value)
 	const FVector ForwardDirection = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::X);
 	const FVector RightDirection = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::Y);
 
-	if (APawn* ControlledPawn = GetPawn<APawn>())
+	if (RewindCharacter)
 	{
-		ControlledPawn->AddMovementInput(ForwardDirection, MovementVector.Y);
-		ControlledPawn->AddMovementInput(RightDirection, MovementVector.X);
+		RewindCharacter->AddMovementInput(ForwardDirection, MovementVector.Y);
+		RewindCharacter->AddMovementInput(RightDirection, MovementVector.X);
 	}
 }
 
@@ -80,17 +84,17 @@ void ARewindPlayerController::Look(const FInputActionValue& Value)
 {
 	FVector2D LookAxisVector = Value.Get<FVector2D>();
 
-	if (APawn* ControlledPawn = GetPawn<APawn>())
+	if (RewindCharacter)
 	{
-		ControlledPawn->AddControllerYawInput(LookAxisVector.X);
-		ControlledPawn->AddControllerPitchInput(LookAxisVector.Y);
+		RewindCharacter->AddControllerYawInput(LookAxisVector.X);
+		RewindCharacter->AddControllerPitchInput(LookAxisVector.Y);
 	}
 }
 
 void ARewindPlayerController::Jump()
 {
-	if (CharacterRewindComponent->IsTimeBeingManipulated()) { return; }
-	if (ACharacter* RewindCharacter = Cast<ACharacter>(GetPawn()))
+	if (CharacterRewindComponent->IsTimeBeingManipulated() || RewindCharacter->bIsDead) { return; }
+	if (RewindCharacter)
 	{
 		RewindCharacter->Jump();
 	}
@@ -98,8 +102,8 @@ void ARewindPlayerController::Jump()
 
 void ARewindPlayerController::StopJumping()
 {
-	if (CharacterRewindComponent->IsTimeBeingManipulated()) { return; }
-	if (ACharacter* RewindCharacter = Cast<ACharacter>(GetPawn()))
+	if (CharacterRewindComponent->IsTimeBeingManipulated() || RewindCharacter->bIsDead) { return; }
+	if (RewindCharacter)
 	{
 		RewindCharacter->StopJumping();
 	}
@@ -167,5 +171,5 @@ void ARewindPlayerController::SetRewindSpeedFastest()
 
 void ARewindPlayerController::ToggleRewindParticipation()
 {
-
+	RewindCharacter->GetCharacterRewindComponent()->SetIsRewindingEnabled(!RewindCharacter->GetCharacterRewindComponent()->IsRewindingEnabled());
 }

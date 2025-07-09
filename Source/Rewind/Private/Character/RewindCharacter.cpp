@@ -12,6 +12,7 @@
 #include "InputActionValue.h"
 #include "Rewind/CharacterRewindComponent.h"
 #include "Rewind/SnapshotTypes.h"
+#include "Kismet/GameplayStatics.h"
 
 ARewindCharacter::ARewindCharacter()
 {
@@ -43,6 +44,18 @@ ARewindCharacter::ARewindCharacter()
 	FollowCamera->bUsePawnControlRotation = false; // Camera does not rotate relative to arm
 
 	CharacterRewindComponent = CreateDefaultSubobject<UCharacterRewindComponent>(TEXT("CharacterRewindComponent"));
+}
+
+void ARewindCharacter::Die()
+{
+	bIsDead = true;
+	DeathStartTime = GetWorld()->GetTimeSeconds();
+	TObjectPtr<UAnimInstance> AnimInstance = GetMesh()->GetAnimInstance();
+	if (AnimInstance && DeathMontage) { AnimInstance->Montage_Play(DeathMontage); }
+}
+
+void ARewindCharacter::Realive()
+{
 }
 
 

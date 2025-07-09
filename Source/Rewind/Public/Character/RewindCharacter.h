@@ -27,8 +27,21 @@ public:
 	FORCEINLINE UCameraComponent* GetFollowCamera() const { return FollowCamera; }
 	FORCEINLINE UCharacterRewindComponent* GetCharacterRewindComponent() const { return CharacterRewindComponent; }
 
-private:
+protected:
+	// TODO: Die in specific time
+	UFUNCTION(BlueprintCallable)
+	void Die();
 
+	// TODO: Realive in specific time
+	UFUNCTION(BlueprintCallable)
+	void Realive();
+
+public:
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Dead")
+	bool bIsDead = false;
+
+private:
+	
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Rewind", meta = (AllowPrivateAccess = "true"))
 	TObjectPtr<UCharacterRewindComponent> CharacterRewindComponent;
 
@@ -38,5 +51,13 @@ private:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Camera", meta = (AllowPrivateAccess = "true"))
 	TObjectPtr<UCameraComponent> FollowCamera;
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Dead", meta = (AllowPrivateAccess = "true"))
+	float DeathStartTime = 0.0f;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Dead")
+	TObjectPtr<UAnimMontage> DeathMontage;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Dead")
+	TObjectPtr<UAnimMontage> RealiveMontage;
 };
 

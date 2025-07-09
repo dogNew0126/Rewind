@@ -42,4 +42,11 @@ struct FPlayerSnapshot
 	// Movement mode from the owner's movement component at time snapshot was recorded
 	UPROPERTY(Transient)
 	TEnumAsByte<enum EMovementMode> MovementMode = EMovementMode::MOVE_None;
+
+	// Progress of death animation playback
+	UPROPERTY(Transient)
+	float DeathAnimationTime = 0.0f;
+
+	UPROPERTY(Transient)
+	bool bIsDead = false;
 };
