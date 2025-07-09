@@ -43,10 +43,10 @@ struct FPlayerSnapshot
 	UPROPERTY(Transient)
 	TEnumAsByte<enum EMovementMode> MovementMode = EMovementMode::MOVE_None;
 
-	// Progress of death animation playback
-	UPROPERTY(Transient)
-	float DeathAnimationTime = 0.0f;
-
 	UPROPERTY(Transient)
 	bool bIsDead = false;
+
+	// Progress of death animation playback
+	UPROPERTY(Transient)
+	float DeathPosition = 0.0f;
 };

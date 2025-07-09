@@ -7,6 +7,7 @@
 #include "CharacterRewindComponent.generated.h"
 
 class UCharacterMovementComponent;
+class ARewindCharacter;
 
 UCLASS()
 class REWIND_API UCharacterRewindComponent : public URewindComponent
@@ -38,6 +39,9 @@ private:
 	
 private:
 	TRingBuffer<FPlayerSnapshot> PlayerSnapshots;
+
+	UPROPERTY(Transient, VisibleAnywhere, Category = "Character")
+	TObjectPtr<ARewindCharacter> RewindCharacter;
 
 	UPROPERTY(Transient, VisibleAnywhere, Category = "Rewind|Debug")
 	TObjectPtr<UCharacterMovementComponent> OwnerMovementComponent;

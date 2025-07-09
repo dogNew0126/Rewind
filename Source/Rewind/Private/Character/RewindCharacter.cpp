@@ -49,14 +49,6 @@ ARewindCharacter::ARewindCharacter()
 void ARewindCharacter::Die()
 {
 	bIsDead = true;
-	DeathStartTime = GetWorld()->GetTimeSeconds();
 	TObjectPtr<UAnimInstance> AnimInstance = GetMesh()->GetAnimInstance();
 	if (AnimInstance && DeathMontage) { AnimInstance->Montage_Play(DeathMontage); }
 }
-
-void ARewindCharacter::Realive()
-{
-}
-
-
-

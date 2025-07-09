@@ -5,6 +5,7 @@
 #include "GameFramework/Character.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Game/RewindGameModeBase.h"
+#include "Character/RewindCharacter.h"
 
 UCharacterRewindComponent::UCharacterRewindComponent() : Super()
 {
@@ -20,9 +21,9 @@ void UCharacterRewindComponent::BeginPlay()
 {
 	Super::BeginPlay();
 
-	ACharacter* Character = Cast<ACharacter>(GetOwner());
-	OwnerMovementComponent = CastChecked<UCharacterMovementComponent>(Character->GetMovementComponent());
-	OwnerSkeletalMesh = CastChecked<USkeletalMeshComponent>(Character->GetMesh());
+	RewindCharacter = Cast<ARewindCharacter>(GetOwner());
+	OwnerMovementComponent = CastChecked<UCharacterMovementComponent>(RewindCharacter->GetMovementComponent());
+	OwnerSkeletalMesh = CastChecked<USkeletalMeshComponent>(RewindCharacter->GetMesh());
 
 }
 
@@ -106,7 +107,13 @@ void UCharacterRewindComponent::OnRecordSnapshot()
 	// Record the movement velocity and movement mode
 	FVector MovementVelocity = OwnerMovementComponent->Velocity;
 	TEnumAsByte<EMovementMode> MovementMode = OwnerMovementComponent->MovementMode;
-	int32 LatestMovementSnapshotIndex = PlayerSnapshots.Emplace(TimeSinceSnapshotsChanged, MovementVelocity, MovementMode);
+	bool bIsDead = RewindCharacter->bIsDead;
+	float DeathPosition = 0.f;
+	if (bIsDead)
+	{
+		DeathPosition = RewindCharacter->GetMesh()->GetAnimInstance()->Montage_GetPosition(RewindCharacter->DeathMontage);
+	}
+	int32 LatestMovementSnapshotIndex = PlayerSnapshots.Emplace(TimeSinceSnapshotsChanged, MovementVelocity, MovementMode, bIsDead, DeathPosition);
 	check(LatestSnapshotIndex == LatestMovementSnapshotIndex);
 }
 
@@ -117,6 +124,22 @@ void UCharacterRewindComponent::ApplySnapshot(const FPlayerSnapshot& Snapshot, b
 		OwnerMovementComponent->Velocity =
 			bApplyTimeDilationToVelocity ? Snapshot.MovementVelocity * GameMode->GetGlobalRewindSpeed() : Snapshot.MovementVelocity;
 		OwnerMovementComponent->SetMovementMode(Snapshot.MovementMode);
+		RewindCharacter->bIsDead = Snapshot.bIsDead;
+		if (RewindCharacter->bIsDead)
+		{
+			TObjectPtr<UAnimInstance> AnimInstance = RewindCharacter->GetMesh()->GetAnimInstance();
+			if (IsRewinding())
+			{
+				if(!AnimInstance->GetActiveInstanceForMontage(RewindCharacter->RealiveMontage)) { AnimInstance->Montage_Play(RewindCharacter->RealiveMontage); }
+				UE_LOG(LogTemp, Warning, TEXT("DeathPosition: %f"), RewindCharacter->RealiveMontage->GetPlayLength() - Snapshot.DeathPosition);
+				AnimInstance->Montage_SetPosition(RewindCharacter->RealiveMontage, RewindCharacter->RealiveMontage->GetPlayLength() - Snapshot.DeathPosition);
+			}
+			else
+			{
+				if (!AnimInstance->GetActiveInstanceForMontage(RewindCharacter->DeathMontage)) { AnimInstance->Montage_Play(RewindCharacter->DeathMontage); }
+				AnimInstance->Montage_SetPosition(RewindCharacter->DeathMontage, Snapshot.DeathPosition);
+			}
+		}
 	}
 }
 
@@ -126,5 +149,7 @@ FPlayerSnapshot UCharacterRewindComponent::BlendSnapshots(const FPlayerSnapshot&
 	FPlayerSnapshot BlendedSnapshot;
 	BlendedSnapshot.MovementVelocity = FMath::Lerp(A.MovementVelocity, B.MovementVelocity, Alpha);
 	BlendedSnapshot.MovementMode = Alpha < 0.5f ? A.MovementMode : B.MovementMode;
+	BlendedSnapshot.bIsDead = Alpha < 0.5f ? A.bIsDead : B.bIsDead;
+	BlendedSnapshot.DeathPosition = FMath::Lerp(A.DeathPosition, B.DeathPosition, Alpha);
 	return BlendedSnapshot;
 }
