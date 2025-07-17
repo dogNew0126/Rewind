@@ -5,7 +5,7 @@
 #include "GameFramework/Character.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Game/RewindGameModeBase.h"
-#include "Character/RewindCharacter.h"
+#include "Character/BaseCharacter.h"
 
 UCharacterRewindComponent::UCharacterRewindComponent() : Super()
 {
@@ -21,7 +21,7 @@ void UCharacterRewindComponent::BeginPlay()
 {
 	Super::BeginPlay();
 
-	RewindCharacter = Cast<ARewindCharacter>(GetOwner());
+	RewindCharacter = Cast<ABaseCharacter>(GetOwner());
 	OwnerMovementComponent = CastChecked<UCharacterMovementComponent>(RewindCharacter->GetMovementComponent());
 	OwnerSkeletalMesh = CastChecked<USkeletalMeshComponent>(RewindCharacter->GetMesh());
 
