@@ -15,4 +15,5 @@ class REWIND_API AEnemy : public ABaseCharacter
 	GENERATED_BODY()
 	
 	AEnemy();
+
 };
