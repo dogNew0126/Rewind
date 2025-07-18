@@ -25,6 +25,7 @@ ABaseCharacter::ABaseCharacter()
 
 void ABaseCharacter::Die()
 {
+	GEngine->AddOnScreenDebugMessage(-1, 10.f, FColor::Cyan, "Die!!!!!!!");
 	bIsDead = true;
 	TObjectPtr<UAnimInstance> AnimInstance = GetMesh()->GetAnimInstance();
 	if (AnimInstance && DeathMontage) { AnimInstance->Montage_Play(DeathMontage); }
