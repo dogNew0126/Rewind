@@ -129,7 +129,7 @@ bool URewindComponent::TryStartTimeManipulation(bool& bStateToSet, bool bResetTi
 	bStateToSet = true;
 	if (bResetTimeSinceSnapshotsChanged) { TimeSinceSnapshotsChanged = 0.0f; }
 
-	PausePhysics();
+	//PausePhysics();
 	bAnimationsPausedAtStartOfTimeManipulation = bPausedAnimation;
 
 	return true;

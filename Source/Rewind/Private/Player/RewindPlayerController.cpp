@@ -136,6 +136,19 @@ void ARewindPlayerController::StopFastForward()
 void ARewindPlayerController::ToggleTimeScrub()
 {
 	check(GameMode);
+	if (bCanUseSkill)
+	{
+		bCanUseSkill = false;
+		bIsUsingSkill = true;
+		RewindCharacter->GetCharacterRewindComponent()->SetIsRewindingEnabled(false);
+		GetWorldTimerManager().SetTimer(SkillPersistTimerHandle, this, &ARewindPlayerController::StartCooldownTimer, SkillPersistTime);
+	}
+	else if (bIsUsingSkill)
+	{
+		StartCooldownTimer();
+		GameMode->ToggleTimeScrub();
+		return;
+	}
 	GameMode->ToggleTimeScrub();
 }
 
@@ -172,4 +185,16 @@ void ARewindPlayerController::SetRewindSpeedFastest()
 void ARewindPlayerController::ToggleRewindParticipation()
 {
 	RewindCharacter->GetCharacterRewindComponent()->SetIsRewindingEnabled(!RewindCharacter->GetCharacterRewindComponent()->IsRewindingEnabled());
+}
+
+void ARewindPlayerController::StartSkillTimer()
+{
+	bCanUseSkill = true;
+}
+
+void ARewindPlayerController::StartCooldownTimer()
+{
+	bIsUsingSkill = false;
+	RewindCharacter->GetCharacterRewindComponent()->SetIsRewindingEnabled(true);
+	GetWorldTimerManager().SetTimer(SkillCooldownTimerHandle, this, &ARewindPlayerController::StartSkillTimer, SkillCooldownTime);
 }

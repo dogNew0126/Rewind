@@ -46,6 +46,10 @@ protected:
 	void SetRewindSpeedFaster();
 	void SetRewindSpeedFastest();
 	void ToggleRewindParticipation();
+
+private:
+	void StartSkillTimer();
+	void StartCooldownTimer();
 	
 private:
 	UPROPERTY(Transient, VisibleAnywhere, Category = "Rewind|Debug")
@@ -84,7 +88,6 @@ private:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	TObjectPtr<UInputAction> SetRewindSpeedSlowestAction;
 
-
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	TObjectPtr<UInputAction> SetRewindSpeedSlowerAction;
 
@@ -97,4 +100,21 @@ private:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	TObjectPtr<UInputAction> SetRewindSpeedFastestAction;
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Skill, meta = (AllowPrivateAccess = "true"))
+	float SkillPersistTime = 2.f;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Skill, meta = (AllowPrivateAccess = "true"))
+	float SkillCooldownTime = 8.f;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Skill, meta = (AllowPrivateAccess = "true"))
+	bool bCanUseSkill = true;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Skill, meta = (AllowPrivateAccess = "true"))
+	bool bIsUsingSkill = false;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Skill, meta = (AllowPrivateAccess = "true"))
+	FTimerHandle SkillPersistTimerHandle;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Skill, meta = (AllowPrivateAccess = "true"))
+	FTimerHandle SkillCooldownTimerHandle;
 };
