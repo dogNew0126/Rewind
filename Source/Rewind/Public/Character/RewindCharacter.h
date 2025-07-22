@@ -25,6 +25,8 @@ public:
 
 	FORCEINLINE USpringArmComponent* GetCameraBoom() const { return CameraBoom; }
 	FORCEINLINE UCameraComponent* GetFollowCamera() const { return FollowCamera; }
+	FORCEINLINE int GetPickUpCount() const { return PickUpCount; }
+	FORCEINLINE void SetPickUpCount(int NewPickUpCount) { PickUpCount = NewPickUpCount; }
 
 private:
 
@@ -33,6 +35,9 @@ private:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Camera", meta = (AllowPrivateAccess = "true"))
 	TObjectPtr<UCameraComponent> FollowCamera;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Pickable", meta = (AllowPrivateAccess = "true"))
+	int PickUpCount = 0;
 
 };
 

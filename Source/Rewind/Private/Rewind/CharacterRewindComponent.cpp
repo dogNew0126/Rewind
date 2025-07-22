@@ -131,7 +131,6 @@ void UCharacterRewindComponent::ApplySnapshot(const FPlayerSnapshot& Snapshot, b
 			if (IsRewinding())
 			{
 				if(!AnimInstance->GetActiveInstanceForMontage(RewindCharacter->RealiveMontage)) { AnimInstance->Montage_Play(RewindCharacter->RealiveMontage); }
-				UE_LOG(LogTemp, Warning, TEXT("DeathPosition: %f"), RewindCharacter->RealiveMontage->GetPlayLength() - Snapshot.DeathPosition);
 				AnimInstance->Montage_SetPosition(RewindCharacter->RealiveMontage, RewindCharacter->RealiveMontage->GetPlayLength() - Snapshot.DeathPosition);
 			}
 			else

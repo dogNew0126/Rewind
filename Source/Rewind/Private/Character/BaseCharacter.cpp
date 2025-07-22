@@ -25,6 +25,7 @@ ABaseCharacter::ABaseCharacter()
 
 void ABaseCharacter::Die()
 {
+	if (bIsDead || CharacterRewindComponent->IsTimeBeingManipulated()) return;
 	bIsDead = true;
 	TObjectPtr<UAnimInstance> AnimInstance = GetMesh()->GetAnimInstance();
 	if (AnimInstance && DeathMontage) { AnimInstance->Montage_Play(DeathMontage); }
