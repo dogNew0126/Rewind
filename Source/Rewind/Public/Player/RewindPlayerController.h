@@ -101,7 +101,7 @@ private:
 	TObjectPtr<UInputAction> SetRewindSpeedFastestAction;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Skill, meta = (AllowPrivateAccess = "true"))
-	float SkillPersistTime = 2.f;
+	float SkillPersistTime = 3.f;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Skill, meta = (AllowPrivateAccess = "true"))
 	float SkillCooldownTime = 8.f;
