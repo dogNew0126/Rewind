@@ -13,6 +13,9 @@ struct FInputActionValue;
 
 DECLARE_LOG_CATEGORY_EXTERN(LogTemplateCharacter, Log, All);
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnSkillActive);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnSkillCooldown);
+
 class UCharacterRewindComponent;
 class ARewindCharacter;
 
@@ -50,7 +53,25 @@ protected:
 private:
 	void StartSkillTimer();
 	void StartCooldownTimer();
-	
+
+public:
+	UFUNCTION(BlueprintCallable, Category = "Skill")
+	FORCEINLINE float GetSkillPersistTime() { return SkillPersistTime; };
+	UFUNCTION(BlueprintCallable, Category = "Skill")
+	FORCEINLINE float GetSkillCooldownTime() { return SkillCooldownTime; };
+	UFUNCTION(BlueprintCallable, Category = "Skill")
+	FORCEINLINE FTimerHandle GetSkillPersistTimerHandle() { return SkillPersistTimerHandle; };
+
+	UFUNCTION(BlueprintCallable, Category = "Skill")
+	FORCEINLINE FTimerHandle GetSkillCooldownTimerHandle() { return SkillCooldownTimerHandle; };
+
+public:
+	UPROPERTY(BlueprintAssignable, Category = "Skill")
+	FOnSkillActive OnSkillActive;
+
+	UPROPERTY(BlueprintAssignable, Category = "Skill")
+	FOnSkillCooldown OnSkillCooldown;
+
 private:
 	UPROPERTY(Transient, VisibleAnywhere, Category = "Rewind|Debug")
 	TObjectPtr<ARewindGameModeBase> GameMode;
@@ -104,7 +125,7 @@ private:
 	float SkillPersistTime = 3.f;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Skill, meta = (AllowPrivateAccess = "true"))
-	float SkillCooldownTime = 8.f;
+	float SkillCooldownTime = 10.f;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Skill, meta = (AllowPrivateAccess = "true"))
 	bool bCanUseSkill = true;

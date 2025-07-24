@@ -54,6 +54,9 @@ public:
 	FORCEINLINE bool IsGlobalTimeScrubbing() const { return bIsGlobalTimeScrubbing; };
 
 public:
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Total")
+	float TotalRewindSeconds = 300.0f;
+
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Rewind")
 	float SlowestRewindSpeed = 0.25f;
 
