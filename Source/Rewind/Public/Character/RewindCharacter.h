@@ -14,6 +14,8 @@ class UInputAction;
 class UCharacterRewindComponent;
 struct FInputActionValue;
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnAddPickable);
+
 UCLASS(config=Game)
 class ARewindCharacter : public ABaseCharacter
 {
@@ -26,7 +28,12 @@ public:
 	FORCEINLINE USpringArmComponent* GetCameraBoom() const { return CameraBoom; }
 	FORCEINLINE UCameraComponent* GetFollowCamera() const { return FollowCamera; }
 	FORCEINLINE int GetPickUpCount() const { return PickUpCount; }
-	FORCEINLINE void SetPickUpCount(int NewPickUpCount) { PickUpCount = NewPickUpCount; }
+	void AddPickUpCount();
+
+public:
+	
+	UPROPERTY(BlueprintAssignable, Category = "Pickable")
+	FOnAddPickable OnAddPickable;
 
 private:
 

@@ -33,3 +33,9 @@ ARewindCharacter::ARewindCharacter()
 	FollowCamera->bUsePawnControlRotation = false; // Camera does not rotate relative to arm
 
 }
+
+void ARewindCharacter::AddPickUpCount()
+{
+	PickUpCount++;
+	OnAddPickable.Broadcast();
+}

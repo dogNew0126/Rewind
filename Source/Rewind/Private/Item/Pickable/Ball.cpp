@@ -18,9 +18,7 @@ void ABall::OnSphereOverlap(UPrimitiveComponent* OverlappedComponent, AActor* Ot
 				GetActorLocation()
 			);
 		}
-		RewindCharacter->SetPickUpCount(RewindCharacter->GetPickUpCount() + 1);
-		FString Message = FString::Printf(TEXT("Pickable Count: %d"), RewindCharacter->GetPickUpCount());
-		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Yellow, Message);
+		RewindCharacter->AddPickUpCount();
 		Destroy();
 	}
 }
