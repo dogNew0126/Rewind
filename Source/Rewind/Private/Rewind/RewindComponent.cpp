@@ -129,7 +129,7 @@ bool URewindComponent::TryStartTimeManipulation(bool& bStateToSet, bool bResetTi
 	bStateToSet = true;
 	if (bResetTimeSinceSnapshotsChanged) { TimeSinceSnapshotsChanged = 0.0f; }
 
-	//PausePhysics();
+	PausePhysics();
 	bAnimationsPausedAtStartOfTimeManipulation = bPausedAnimation;
 
 	return true;
@@ -234,7 +234,9 @@ void URewindComponent::RecordSnapshot(float DeltaTime)
 
 void URewindComponent::OnRecordSnapshot()
 {
-	FTransform Transform = GetOwner()->GetActorTransform();
+	FTransform Transform;
+	if (RecordComponent) { Transform = RecordComponent->GetComponentTransform(); }
+	else { Transform = GetOwner()->GetActorTransform(); }
 	FVector LinearVelocity = OwnerRootComponent ? OwnerRootComponent->GetPhysicsLinearVelocity() : FVector::Zero();
 	FVector AngularVelocityInRadians = OwnerRootComponent ? OwnerRootComponent->GetPhysicsAngularVelocityInRadians() : FVector::Zero();
 	LatestSnapshotIndex = Snapshots.Emplace(TimeSinceSnapshotsChanged, Transform, LinearVelocity, AngularVelocityInRadians);
@@ -352,7 +354,8 @@ FBaseSnapshot URewindComponent::BlendSnapshots(const FBaseSnapshot& A, const FBa
 
 void URewindComponent::ApplySnapshot(const FBaseSnapshot& Snapshot, bool bApplyPhysics)
 {
-	GetOwner()->SetActorTransform(Snapshot.Transform);
+	if (RecordComponent) { RecordComponent->SetWorldTransform(Snapshot.Transform); }
+	else { GetOwner()->SetActorTransform(Snapshot.Transform); }
 	if (OwnerRootComponent && bApplyPhysics)
 	{
 		OwnerRootComponent->SetPhysicsLinearVelocity(Snapshot.LinearVelocity);

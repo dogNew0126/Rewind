@@ -52,6 +52,8 @@ public:
 	FORCEINLINE bool IsGlobalFastForwarding() const { return bIsGlobalFastForwarding; };
 	UFUNCTION(BlueprintCallable, Category = "Rewind")
 	FORCEINLINE bool IsGlobalTimeScrubbing() const { return bIsGlobalTimeScrubbing; };
+	UFUNCTION(BlueprintCallable, Category = "Rewind")
+	FORCEINLINE bool IsTimeBeingManipulated() const { return bIsGlobalRewinding || bIsGlobalFastForwarding || bIsGlobalTimeScrubbing; };
 
 public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Total")

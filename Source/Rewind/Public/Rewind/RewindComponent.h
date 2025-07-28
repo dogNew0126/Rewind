@@ -116,6 +116,9 @@ public:
 	UPROPERTY(BlueprintAssignable, Category = "Rewind")
 	FOnTimeScrubCompleted OnTimeScrubCompleted;
 
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Rewind")
+	TObjectPtr<USceneComponent> RecordComponent = nullptr;
+
 protected:
 	UPROPERTY(Transient, VisibleAnywhere, BlueprintReadOnly, Category = "Rewind")
 	bool bIsRewinding = false;
