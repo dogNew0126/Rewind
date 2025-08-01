@@ -56,8 +56,17 @@ public:
 	FORCEINLINE bool IsTimeBeingManipulated() const { return bIsGlobalRewinding || bIsGlobalFastForwarding || bIsGlobalTimeScrubbing; };
 
 public:
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Total")
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Total")
+	int TotalPickableItemCount = 10;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Total")
 	float TotalRewindSeconds = 300.0f;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Total")
+	int TotalEnemyCount = 10;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Total")
+	int TotalRoomCount = 50;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Rewind")
 	float SlowestRewindSpeed = 0.25f;
