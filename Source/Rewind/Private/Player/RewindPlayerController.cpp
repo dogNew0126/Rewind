@@ -44,16 +44,16 @@ void ARewindPlayerController::SetupInputComponent()
 		/** Time */
 		EnhancedInputComponent->BindAction(RewindAction, ETriggerEvent::Started, this, &ARewindPlayerController::Rewind);
 		EnhancedInputComponent->BindAction(RewindAction, ETriggerEvent::Completed, this, &ARewindPlayerController::StopRewind);
-		EnhancedInputComponent->BindAction(FastForwardAction, ETriggerEvent::Started, this, &ARewindPlayerController::FastForward);
-		EnhancedInputComponent->BindAction(FastForwardAction, ETriggerEvent::Completed, this, &ARewindPlayerController::StopFastForward);
+		//EnhancedInputComponent->BindAction(FastForwardAction, ETriggerEvent::Started, this, &ARewindPlayerController::FastForward);
+		//EnhancedInputComponent->BindAction(FastForwardAction, ETriggerEvent::Completed, this, &ARewindPlayerController::StopFastForward);
 		EnhancedInputComponent->BindAction(ToggleTimeScrubAction, ETriggerEvent::Started, this, &ARewindPlayerController::ToggleTimeScrub);
-		EnhancedInputComponent->BindAction(ToggleRewindPartipationAction, ETriggerEvent::Started, this, &ARewindPlayerController::ToggleRewindParticipation);
+		//EnhancedInputComponent->BindAction(ToggleRewindPartipationAction, ETriggerEvent::Started, this, &ARewindPlayerController::ToggleRewindParticipation);
 
-		EnhancedInputComponent->BindAction(SetRewindSpeedSlowestAction, ETriggerEvent::Started, this, &ARewindPlayerController::SetRewindSpeedSlowest);
-		EnhancedInputComponent->BindAction(SetRewindSpeedSlowerAction, ETriggerEvent::Started, this, &ARewindPlayerController::SetRewindSpeedSlower);
-		EnhancedInputComponent->BindAction(SetRewindSpeedNormalAction, ETriggerEvent::Started, this, &ARewindPlayerController::SetRewindSpeedNormal);
-		EnhancedInputComponent->BindAction(SetRewindSpeedFasterAction, ETriggerEvent::Started, this, &ARewindPlayerController::SetRewindSpeedFaster);
-		EnhancedInputComponent->BindAction(SetRewindSpeedFastestAction, ETriggerEvent::Started, this, &ARewindPlayerController::SetRewindSpeedFastest);
+		//EnhancedInputComponent->BindAction(SetRewindSpeedSlowestAction, ETriggerEvent::Started, this, &ARewindPlayerController::SetRewindSpeedSlowest);
+		//EnhancedInputComponent->BindAction(SetRewindSpeedSlowerAction, ETriggerEvent::Started, this, &ARewindPlayerController::SetRewindSpeedSlower);
+		//EnhancedInputComponent->BindAction(SetRewindSpeedNormalAction, ETriggerEvent::Started, this, &ARewindPlayerController::SetRewindSpeedNormal);
+		//EnhancedInputComponent->BindAction(SetRewindSpeedFasterAction, ETriggerEvent::Started, this, &ARewindPlayerController::SetRewindSpeedFaster);
+		//EnhancedInputComponent->BindAction(SetRewindSpeedFastestAction, ETriggerEvent::Started, this, &ARewindPlayerController::SetRewindSpeedFastest);
 	}
 	else
 	{
@@ -136,21 +136,19 @@ void ARewindPlayerController::StopFastForward()
 void ARewindPlayerController::ToggleTimeScrub()
 {
 	check(GameMode);
-	if (bCanUseSkill && !GameMode->IsGlobalTimeScrubbing())
+	if (bIsUsingSkill)
+	{
+		return;
+	}
+	else if (bCanUseSkill && !GameMode->IsGlobalTimeScrubbing())
 	{
 		bCanUseSkill = false;
 		bIsUsingSkill = true;
 		RewindCharacter->GetCharacterRewindComponent()->SetIsRewindingEnabled(false);
 		OnSkillActive.Broadcast();
 		GetWorldTimerManager().SetTimer(SkillPersistTimerHandle, this, &ARewindPlayerController::StartCooldownTimer, SkillPersistTime);
-	}
-	else if (bIsUsingSkill)
-	{
-		StartCooldownTimer();
 		GameMode->ToggleTimeScrub();
-		return;
 	}
-	GameMode->ToggleTimeScrub();
 }
 
 void ARewindPlayerController::SetRewindSpeedSlowest()
@@ -198,6 +196,7 @@ void ARewindPlayerController::StartCooldownTimer()
 	OnSkillCooldown.Broadcast();
 	GetWorldTimerManager().ClearTimer(SkillPersistTimerHandle);
 	bIsUsingSkill = false;
+	GameMode->ToggleTimeScrub();
 	RewindCharacter->GetCharacterRewindComponent()->SetIsRewindingEnabled(true);
 	GetWorldTimerManager().SetTimer(SkillCooldownTimerHandle, this, &ARewindPlayerController::StartSkillTimer, SkillCooldownTime);
 }
