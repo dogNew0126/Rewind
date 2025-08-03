@@ -15,6 +15,7 @@ DECLARE_LOG_CATEGORY_EXTERN(LogTemplateCharacter, Log, All);
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnSkillActive);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnSkillCooldown);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnShakeSkill);
 
 class UCharacterRewindComponent;
 class ARewindCharacter;
@@ -71,6 +72,9 @@ public:
 
 	UPROPERTY(BlueprintAssignable, Category = "Skill")
 	FOnSkillCooldown OnSkillCooldown;
+
+	UPROPERTY(BlueprintAssignable, Category = "Skill")
+	FOnShakeSkill OnShakeSkill;
 
 private:
 	UPROPERTY(Transient, VisibleAnywhere, Category = "Rewind|Debug")

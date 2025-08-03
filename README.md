@@ -36,8 +36,7 @@
 
 * 机关、陷阱放置
 * 小道具
-+ UI抖动，选择难度方框
-+ Step sound
++ 相机collision
 
 ## TOFIX：
 

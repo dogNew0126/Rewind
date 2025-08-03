@@ -136,11 +136,12 @@ void ARewindPlayerController::StopFastForward()
 void ARewindPlayerController::ToggleTimeScrub()
 {
 	check(GameMode);
-	if (bIsUsingSkill)
+	if (bIsUsingSkill || !bCanUseSkill)
 	{
+		OnShakeSkill.Broadcast();
 		return;
 	}
-	else if (bCanUseSkill && !GameMode->IsGlobalTimeScrubbing())
+	else if (!GameMode->IsGlobalTimeScrubbing())
 	{
 		bCanUseSkill = false;
 		bIsUsingSkill = true;
