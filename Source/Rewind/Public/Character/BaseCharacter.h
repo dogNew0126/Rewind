@@ -31,6 +31,9 @@ public:
 
 	UPROPERTY(EditDefaultsOnly, Category = "Dead")
 	TObjectPtr<UAnimMontage> RealiveMontage;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Dead")
+	TObjectPtr<UAnimMontage> WinMontage;
 private:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Rewind", meta = (AllowPrivateAccess = "true"))
