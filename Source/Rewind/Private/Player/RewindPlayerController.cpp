@@ -136,7 +136,7 @@ void ARewindPlayerController::StopFastForward()
 void ARewindPlayerController::ToggleTimeScrub()
 {
 	check(GameMode);
-	if (bIsUsingSkill || !bCanUseSkill)
+	if (bIsUsingSkill || !bCanUseSkill || RewindCharacter->bIsDead)
 	{
 		OnShakeSkill.Broadcast();
 		return;
