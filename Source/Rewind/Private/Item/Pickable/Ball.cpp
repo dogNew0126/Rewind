@@ -5,7 +5,7 @@
 #include "Character/RewindCharacter.h"
 #include "Kismet/GameplayStatics.h"
 
-void ABall::OnSphereOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+void ABall::OnSphereOverlap_Implementation(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
 	TObjectPtr<ARewindCharacter> RewindCharacter = Cast<ARewindCharacter>(OtherActor);
 	if (RewindCharacter)
