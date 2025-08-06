@@ -5,6 +5,9 @@
 #include "Components/CapsuleComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Rewind/CharacterRewindComponent.h"
+#include "NiagaraFunctionLibrary.h"
+#include "NiagaraComponent.h"
+#include "Kismet/GameplayStatics.h"
 
 ABaseCharacter::ABaseCharacter()
 {
@@ -29,6 +32,22 @@ void ABaseCharacter::Die()
 	bIsDead = true;
 	TObjectPtr<UAnimInstance> AnimInstance = GetMesh()->GetAnimInstance();
 	if (AnimInstance && DeathMontage) { AnimInstance->Montage_Play(DeathMontage); }
+	if (HitSound)
+	{
+		UGameplayStatics::PlaySoundAtLocation(
+			this,
+			HitSound,
+			this->GetActorLocation()
+		);
+		if (BloodEffect && GetWorld())
+		{
+			UNiagaraFunctionLibrary::SpawnSystemAtLocation(
+				GetWorld(),
+				BloodEffect,
+				this->GetActorLocation()
+			);
+		}
+	}
 }
 
 

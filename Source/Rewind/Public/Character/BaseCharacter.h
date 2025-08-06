@@ -7,6 +7,7 @@
 #include "BaseCharacter.generated.h"
 
 class UCharacterRewindComponent;
+class UNiagaraSystem;
 
 UCLASS()
 class REWIND_API ABaseCharacter : public ACharacter
@@ -20,7 +21,7 @@ public:
 
 protected:
 	UFUNCTION(BlueprintCallable)
-	virtual void Die();
+	void Die();
 
 public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Dead")
@@ -32,8 +33,15 @@ public:
 	UPROPERTY(EditDefaultsOnly, Category = "Dead")
 	TObjectPtr<UAnimMontage> RealiveMontage;
 
-	UPROPERTY(EditDefaultsOnly, Category = "Dead")
+	UPROPERTY(EditDefaultsOnly, Category = "Win")
 	TObjectPtr<UAnimMontage> WinMontage;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Dead")
+	TObjectPtr<USoundBase> HitSound;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Dead")
+	TObjectPtr<UNiagaraSystem> BloodEffect;
+
 private:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Rewind", meta = (AllowPrivateAccess = "true"))
